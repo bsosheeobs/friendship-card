@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friendship Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', cursive;
+      background: linear-gradient(135deg, #ffd6f6, #e0c3fc);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .block {
+      width: 90%;
+      max-width: 400px;
+      min-height: 120px;
+      background-color: #ff69b4;
+      margin: 20px auto;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .block:nth-child(odd) { background-color: #c084fc; }
+    .block.active { display: flex; animation: fadeIn 1s ease-in-out; }
+    .message {
+      font-size: 18px;
+      text-align: center;
+      white-space: pre-wrap;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .next-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      color: #c084fc;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+    .emoji {
+      font-size: 30px;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .timer {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="block active" id="block1">
+    <div class="emoji">🥰🥳💕</div>
+    <div class="message" id="message1"></div>
+    <button class="next-btn" onclick="nextBlock(1)">Next</button>
+  </div>  <div class="block" id="block2">
+    <div class="message">
+      Countdown to surprise:
+      <div class="timer" id="timer">5</div>
+    </div>
+  </div>  <div class="block" id="block3">
+    <div class="message" id="message3"></div>
+    <button class="next-btn" onclick="nextBlock(3)">Next</button>
+  </div>  <div class="block" id="block4">
+    <div class="message" id="message4"></div>
+    <button class="next-btn" onclick="nextBlock(4)">Next</button>
+  </div>  <div class="block" id="block5">
+    <div class="message" id="message5"></div>
+  </div>  <script>
+    const messages = {
+      message1: 'Hi Shailabala! Here’s something special for you... ❤️',
+      message3: '💌 Sending you tons of love and hearts! 💖💗💘💞💓💕',
+      message4: `Shailabala, it truly warms my heart to call you a friend.\nI don't know how long this bond will last,\nbut while it does, I’ll treasure every moment we share.\nYou're incredibly beautiful — not just in how you look,\nbut in the way your presence feels.\nAnd no, these aren’t just sweet words —\nthey’re the honest echoes of my heart.`,
+      message5: '🎉 Happy Friendship Day, Shailabala! 🎉❤️'
+    };
+
+    let timer = 5;
+    let countdown;
+
+    function nextBlock(current) {
+      document.getElementById(`block${current}`).classList.remove('active');
+      const next = current + 1;
+      const nextBlock = document.getElementById(`block${next}`);
+      if (nextBlock) {
+        nextBlock.classList.add('active');
+        if (next === 2) {
+          countdown = setInterval(() => {
+            timer--;
+            document.getElementById('timer').innerText = timer;
+            if (timer === 0) {
+              clearInterval(countdown);
+              nextBlockFn(2);
+            }
+          }, 1000);
+        } else if (messages[`message${next}`]) {
+          typeMessage(`message${next}`, messages[`message${next}`]);
+        }
+      }
+    }
+
+    function nextBlockFn(current) {
+      document.getElementById(`block${current}`).classList.remove('active');
+      const next = current + 1;
+      const nextBlock = document.getElementById(`block${next}`);
+      if (nextBlock) {
+        nextBlock.classList.add('active');
+        if (messages[`message${next}`]) {
+          typeMessage(`message${next}`, messages[`message${next}`]);
+        }
+      }
+    }
+
+    function typeMessage(id, text) {
+      let i = 0;
+      const el = document.getElementById(id);
+      el.innerText = '';
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          el.innerText += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 30);
+    }
+
+    // Start typing first message
+    typeMessage('message1', messages.message1);
+  </script></body>
+</html>
